@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+<p id="alert" class="field_with_errors"><%= alert %></p>
+<h1><%= @question.question_name %></h1>
+<% if @question.errors.any? %>
+	<div id="error_explanation">
+	  <h2><%= pluralize(@question.errors.count, "error") %> prohibited this topic from being saved:</h2>
+
+	  <ul>
+	    <% @question.errors.full_messages.each do |message| %>
+	      <li><%= message %></li>
+	    <% end %>
+	  </ul>
+	</div>
+<% end %>
+<a href="#">follow User</a>
+<%= link_to 'follow topic', follow_topic_question_path(@question) %>
+<br/>
+<%= link_to 'Edit', edit_question_path(@question) %> |
+<%= link_to 'Back', questions_path %>
