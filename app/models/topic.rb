@@ -5,8 +5,7 @@ class Topic < ApplicationRecord
 
   def check_topic_already_belong
     if Topic.where(user_id: user_id, question_id: question_id).present?
-      errors.add(:base, 'Topic already followed')
+      errors.add(:base, 'Already following')
     end
   end
-
 end

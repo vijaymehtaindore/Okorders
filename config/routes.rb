@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   resources :questions do
   	member do
     	get 'follow_topic'
+      get 'follow_user'
   	end
   end
   devise_for :users

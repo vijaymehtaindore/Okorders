@@ -12,7 +12,8 @@
   <body>
     <% if user_signed_in? %>
       <li>
-      <%= link_to('Logout', destroy_user_session_path, method: :delete) %>        
+      <%= link_to("Logout", destroy_user_session_path, method: :delete) %>        
+      <span id ="notice" ><%= current_user.email %></span>
       </li>
     <% end %>
     <%= yield %>

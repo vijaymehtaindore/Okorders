@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :set_question, only: [:show, :edit, :update, :destroy,
-                                      :follow_topic]
+                                      :follow_topic, :follow_user]
 
   # GET /questions
   # GET /questions.json
@@ -9,7 +9,6 @@ class QuestionsController < ApplicationController
   end
 
   # GET /questions/1
-  # GET /questions/1.json
   def show
   end
 
@@ -18,12 +17,7 @@ class QuestionsController < ApplicationController
     @question = Question.new
   end
 
-  # GET /questions/1/edit
-  def edit
-  end
-
   # POST /questions
-  # POST /questions.json
   def create
     @question =
       Question.new(question_name: question_params[:question_name],
@@ -32,45 +26,30 @@ class QuestionsController < ApplicationController
     respond_to do |format|
       if @question.save
         format.html { redirect_to @question, notice: 'Question was successfully created.' }
-        format.json { render :show, status: :created, location: @question }
       else
         format.html { render :new }
-        format.json { render json: @question.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # PATCH/PUT /questions/1
-  # PATCH/PUT /questions/1.json
-  def update
-    respond_to do |format|
-      if @question.update(question_params)
-        format.html { redirect_to @question, notice: 'Question was successfully updated.' }
-        format.json { render :show, status: :ok, location: @question }
-      else
-        format.html { render :edit }
-        format.json { render json: @question.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /questions/1
-  # DELETE /questions/1.json
-  def destroy
-    @question.destroy
-    respond_to do |format|
-      format.html { redirect_to questions_url, notice: 'Question was successfully destroyed.' }
-      format.json { head :no_content }
     end
   end
 
   def follow_topic
-    @topic = Topic.new(question_id: params[:id], user_id: current_user.id)
+    @topic = Topic.new(question_id: @question.id, user_id: current_user.id)
     respond_to do |format|
       if @topic.save
-        format.html { redirect_to @question, notice: 'Topic is successfully created.' }
+        format.html { redirect_to @question, notice: 'Topic is followed successfully.' }
       else
-        format.html { redirect_to @question, alert: 'topic has already added for the question' }
+        format.html { redirect_to @question, alert: @topic.errors.full_messages.first }
+      end
+    end
+  end
+
+  def follow_user
+    @follow_question_user = Following.new(following_id: @question.user_id, user_id: current_user.id)
+    respond_to do |format|
+      if @follow_question_user.save
+        format.html { redirect_to @question, notice: 'User is followed successfully.' }
+      else
+        format.html { redirect_to @question, alert: @follow_question_user.errors.full_messages.first }
       end
     end
   end
